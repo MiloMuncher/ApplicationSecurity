@@ -1,10 +1,19 @@
 ﻿@page
 @model IndexModel
+@inject IHttpContextAccessor contxt;
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <ul>
+        <li> Full Name: @contxt.HttpContext.Session.GetString("Full Name")</li>
+        <li> Credit Card Number: @contxt.HttpContext.Session.GetString("Credit Card Number")</li>
+        <li> Gender: @contxt.HttpContext.Session.GetString("Gender")</li>
+        <li> Mobile Number: @contxt.HttpContext.Session.GetString("Mobile Number")</li>
+        <li> Delivery Address: @contxt.HttpContext.Session.GetString("Delivery Address")</li>
+        <li> Email Address: @contxt.HttpContext.Session.GetString("Email Address")</li>
+        <li> About Me: @contxt.HttpContext.Session.GetString("About Me")</li>
+    </ul>
 </div>

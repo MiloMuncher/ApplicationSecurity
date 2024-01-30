@@ -5,8 +5,7 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-sm-12 col-md-12 col-lg-4">
             <h1 class="mb-3">Register</h1>
-
-            <form method="post">
+            <form method="post" asp-antiforgery="true">
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="mb-3">
                     <label class="form-label" asp-for="RModel.FullName">Full Name</label>
@@ -46,13 +45,16 @@
 
                 <div class="mb-3">
                     <label class="form-label" asp-for="RModel.Password">Password</label>
-                    <input type="Text" asp-for="RModel.Password" class="form-control" />
+                    <input type="password" asp-for="RModel.Password" class="form-control" />
                     <span asp-validaton-for="RModel.Password" class="text-danger"></span>
+                    
+                    <div id="password-strength"></div>
+                 
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
-                    <input type="Text" asp-for="RModel.ConfirmPassword" class="form-control" />
+                    <input type="password" asp-for="RModel.ConfirmPassword" class="form-control" />
                     <span asp-validaton-for="RModel.ConfirmPassword" class="text-danger"></span>
                 </div>
            
@@ -69,17 +71,19 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
 <script>
-    document.getElementById('registerForm').addEventListener('submit', function (event) {
-        var password = document.getElementById('RModel_Password').value;
-        var confirmPassword = document.getElementById('RModel_ConfirmPassword').value;
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('RModel_ConfirmPassword').value;
 
-        if (password !== confirmPassword) {
-            event.preventDefault();
-            alert('Password and confirmation password do not match.');
-            return false;
-        }
-        return true;
+            if (password !== confirmPassword) {
+                event.preventDefault();
+                alert('Password and confirmation password do not match.');
+                return false;
+            }
+            return true;
+        });
     });
 </script>

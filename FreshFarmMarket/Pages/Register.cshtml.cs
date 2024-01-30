@@ -1,16 +1,19 @@
 using FreshFarmMarket.Model;
 using FreshFarmMarket.ViewModels;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FreshFarmMarket.Pages
 {
-    public class RegisterModel : PageModel
+	[ValidateAntiForgeryToken]
+	public class RegisterModel : PageModel
     {
 		private UserManager<ApplicationUser> userManager { get; }
 		private SignInManager<ApplicationUser> signInManager { get; }
 		[BindProperty]
+
 		public Register RModel { get; set; }
 		public RegisterModel(UserManager<ApplicationUser> userManager,
 		SignInManager<ApplicationUser> signInManager)
@@ -22,12 +25,15 @@ namespace FreshFarmMarket.Pages
 		{
 			if (ModelState.IsValid)
 			{
+				var dataProtectionProvider = DataProtectionProvider.Create("EncryptData");
+				var protector = dataProtectionProvider.CreateProtector("MySecretKey");
+
 				var user = new ApplicationUser()
 				{
 					UserName = RModel.Email,
 					Email = RModel.Email,
 					FullName = RModel.FullName,
-					CreditCard = RModel.CreditCardNumber,
+					CreditCard = protector.Protect(RModel.CreditCardNumber),
 					PhoneNumber = RModel.MobileNumber,
 					Gender = RModel.Gender,
 					DeliveryAddress = RModel.DeliveryAddress,
