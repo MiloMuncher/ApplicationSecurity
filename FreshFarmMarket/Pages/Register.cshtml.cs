@@ -44,7 +44,7 @@ namespace FreshFarmMarket.Pages
 				if (result.Succeeded)
 				{
 					await signInManager.SignInAsync(user, false);
-					return RedirectToPage("Index");
+					return RedirectToPage("Login");
 				}
 				foreach (var error in result.Errors)
 				{

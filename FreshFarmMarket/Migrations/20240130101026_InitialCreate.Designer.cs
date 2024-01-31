@@ -12,7 +12,7 @@ using WebApp_Core_Identity.Model;
 namespace FreshFarmMarket.Migrations
 {
     [DbContext(typeof(AuthDbContext))]
-    [Migration("20240130030706_InitialCreate")]
+    [Migration("20240130101026_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace FreshFarmMarket.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<string>("AuthToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
