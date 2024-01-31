@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http;
+using WebApp_Core_Identity.Model;
 
 namespace FreshFarmMarket.Pages
 {
@@ -12,14 +13,17 @@ namespace FreshFarmMarket.Pages
     public class IndexModel : PageModel
     {
         private readonly IHttpContextAccessor contxt;
+
+        private readonly AuthDbContext authContext;
         private UserManager<ApplicationUser> userManager { get; }
         private SignInManager<ApplicationUser> signInManager { get; }
 
-        public IndexModel(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public IndexModel(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, AuthDbContext authContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             contxt = httpContextAccessor;
+            this.authContext = authContext;
         }
 
         public async Task<IActionResult> OnGet()
@@ -36,7 +40,15 @@ namespace FreshFarmMarket.Pages
                 await signInManager.SignOutAsync();
                 return RedirectToPage("Login");
             }
+            var log = new AuditLog
+            {
+                UserId = user.Id,
+                LogInOrOut = "Logged In",
+                Time = DateTime.Now,
+            };
 
+            authContext.AuditLogTable.Add(log);
+            authContext.SaveChanges();
             return Page();
         }
     }

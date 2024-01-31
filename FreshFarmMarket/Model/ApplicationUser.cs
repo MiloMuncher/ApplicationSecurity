@@ -11,7 +11,7 @@ namespace FreshFarmMarket.Model
 		public string Gender { get; set; }
 		public string DeliveryAddress {  get; set; }
 		public string AboutMe {  get; set; }
-
-		public string? AuthToken {  get; set; }
+		public string? ProfileImage { get; set; }
+        public string? AuthToken {  get; set; }
 	}
 }

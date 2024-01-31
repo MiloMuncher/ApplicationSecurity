@@ -45,17 +45,24 @@
 
                 <div class="mb-3">
                     <label class="form-label" asp-for="RModel.Password">Password</label>
-                    <input type="password" asp-for="RModel.Password" class="form-control" />
-                    <span asp-validaton-for="RModel.Password" class="text-danger"></span>
-                    
-                    <div id="password-strength"></div>
-                 
+                    <input type="password" id = "password"asp-for="RModel.Password" class="form-control" />
+                    <span asp-validaton-for="RModel.Password" class="text-danger"></span>     
                 </div>
+                <div id="password-strength-bar" class="progress">
+                    <div id="strength-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div id="password-strength-text" class="mt-2"></div>
 
                 <div class="mb-3">
                     <label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
                     <input type="password" asp-for="RModel.ConfirmPassword" class="form-control" />
                     <span asp-validaton-for="RModel.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Profile Image</label>
+                    <input type="file" asp-for="RModel.ProfileImage" class="form-control" />
+                    <span asp-validation-for="RModel.ProfileImage" class="text-danger"></span>
                 </div>
            
                 <div class="mb-3">
@@ -84,6 +91,41 @@
                 return false;
             }
             return true;
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var passwordInput = document.getElementById('password');
+        var strengthBar = document.getElementById('strength-bar');
+        var strengthText = document.getElementById('password-strength-text');
+
+        passwordInput.addEventListener('input', function () {
+            var password = passwordInput.value;
+
+            var result = zxcvbn(password);
+
+            var width = (result.score + 1) * 25;
+            strengthBar.style.width = width + '%';
+            strengthBar.setAttribute('aria-valuenow', width);
+
+            if (result.score === 0) {
+                strengthBar.classList.remove('bg-success', 'bg-warning');
+                strengthBar.classList.add('bg-danger');
+                strengthText.innerHTML = 'Weak';
+                strengthText.classList.remove('text-success', 'text-warning');
+                strengthText.classList.add('text-danger');
+            } else if (result.score === 4) {
+                strengthBar.classList.remove('bg-danger', 'bg-warning');
+                strengthBar.classList.add('bg-success');
+                strengthText.innerHTML = 'Strong';
+                strengthText.classList.remove('text-danger', 'text-warning');
+                strengthText.classList.add('text-success');
+            } else {
+                strengthBar.classList.remove('bg-danger', 'bg-success');
+                strengthBar.classList.add('bg-warning');
+                strengthText.innerHTML = 'Moderate';
+                strengthText.classList.remove('text-danger', 'text-success');
+                strengthText.classList.add('text-warning');
+            }
         });
     });
 </script>

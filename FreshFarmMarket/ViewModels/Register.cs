@@ -11,10 +11,10 @@ namespace FreshFarmMarket.ViewModels
 
 		[Required(ErrorMessage = "Password is required.")]
 		[MinLength(12, ErrorMessage = "Password must be at least 12 characters.")]
-		[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{12,}$", 
+		[RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{12,}$",
 			ErrorMessage = "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.")]
 		[DataType(DataType.Password)]
-		
+
 		public string Password { get; set; }
 
 		[Required(ErrorMessage = "Confirm Password is required.")]
@@ -40,9 +40,14 @@ namespace FreshFarmMarket.ViewModels
 		[Required(ErrorMessage = "Delivery Address is required.")]
 		public string DeliveryAddress { get; set; }
 
-		[Required(ErrorMessage = "Image is required.")]
-		[RegularExpression(@"^[a-zA-Z0-9\s.,'()-]*$", ErrorMessage = "Special characters are not allowed.")]
+        [Display(Name = "Profile Image")]
+        [DataType(DataType.Upload)]
+        [FileExtensions(Extensions = "jpg,jpeg", ErrorMessage = "Please upload a valid image file with .jpg or .jpeg extension.")]
+
+        public string? ProfileImage { get; set; }
+
+        [Required(ErrorMessage = "About Me is required.")]
 		public string AboutMe { get; set; }
 
-		}
 	}
+}

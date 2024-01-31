@@ -46,6 +46,7 @@ namespace FreshFarmMarket.Pages
                     contxt.HttpContext.Session.CommitAsync();
 
                     var user = await userManager.FindByEmailAsync(LModel.Email);
+
 					if (user != null)
 					{
 						await userManager.ResetAccessFailedCountAsync(user);
@@ -74,44 +75,9 @@ namespace FreshFarmMarket.Pages
                     // Account is locked out
                     ModelState.AddModelError("", "Account is locked out due to multiple failed login attempts. Please try again later.");
                 }
-                else
-                {
-                    // Failed login attempt
-                    ModelState.AddModelError("", "Username or Password incorrect");
-                }
+         
             }
 			return Page();
-		}
-		public class Response
-		{
-			public bool Success {  get; set; }
-		}
-		public bool ValidateCaptcha()
-		{
-			string Response = Request.Form["g-recaptcha-response"];
-			bool valid = false;
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create
-			("https://www.google.com/recaptcha/api/siteverify?secret=6LeW32ApAAAAAHhya0qWyDxkE611cGqXa1_OlKZN &response=" + Response);
-			try
-			{
-				using (WebResponse wResponse = request.GetResponse())
-				{
-					using (StreamReader readStream = new StreamReader(wResponse.GetResponseStream()))
-					{
-						string jsonResponse = readStream.ReadToEnd();
-
-						var data = JsonSerializer.Deserialize<Response>(jsonResponse);
-
-						valid = Convert.ToBoolean(data.Success);
-					}
-				}
-				return valid;
-			}
-			catch (WebException ex)
-			{
-				throw ex;
-			}
-
 		}
 	}
 }

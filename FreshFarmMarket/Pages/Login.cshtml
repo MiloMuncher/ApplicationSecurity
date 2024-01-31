@@ -3,19 +3,13 @@
 @{
 }
 
+<script src="https://www.google.com/recaptcha/api.js?render=6LfGzGEpAAAAABpWorrbMe9mMLwy15QI2FUoHaTI"></script>
 <div class="container mt-5">
-	<script src="https://www.google.com/recaptcha/api.js"></script>
-	<script>
-		function onSubmit(token) {
-			document.getElementById("demo-form").submit();
-		}
-	</script>
 	<div class="row justify-content-center align-items-center">
 		<div class="col-sm-12 col-md-12 col-lg-4">
 			<h1 class="mb-3">Login </h1>
-
 			<form method="post" asp-antiforgery="true">
-
+				<div asp-validation-summary="All" class="text-danger"></div>
 				<div class="mb-3">
 					<label class="form-label" asp-for="LModel.Email">Email Address</label>
 					<input type="Text" asp-for="LModel.Email" class="form-control" />
@@ -34,14 +28,12 @@
 				</div>
 
 				<div class="mb-3">
-					<button class="btn btn-primary g-recaptcha"
-							data-sitekey="6LeW32ApAAAAAPgyaGG6_ZH6K3_zq_ZBw9dbLScO"
-							data-callback='onSubmit'
-							data-action='submit'>
+					<button type="submit" class="btn btn-primary" data-action="submit">
 						Login
 					</button>
 				</div>
 			</form>
+			<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response" />
 		</div>
 	</div>
 </div>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Web;
 
 namespace FreshFarmMarket.Pages
 {
@@ -30,31 +31,36 @@ namespace FreshFarmMarket.Pages
 
 				var user = new ApplicationUser()
 				{
-					UserName = RModel.Email,
-					Email = RModel.Email,
-					FullName = RModel.FullName,
+					UserName = HttpUtility.HtmlEncode(RModel.Email),
+					Email = HttpUtility.HtmlEncode(RModel.Email),
+					FullName = HttpUtility.HtmlEncode(RModel.FullName),
 					CreditCard = protector.Protect(RModel.CreditCardNumber),
-					PhoneNumber = RModel.MobileNumber,
-					Gender = RModel.Gender,
-					DeliveryAddress = RModel.DeliveryAddress,
-					AboutMe = RModel.AboutMe,
+					PhoneNumber = HttpUtility.HtmlEncode(RModel.MobileNumber),
+					Gender = HttpUtility.HtmlEncode(RModel.Gender),
+					DeliveryAddress = HttpUtility.HtmlEncode(RModel.DeliveryAddress),
+					AboutMe = HttpUtility.HtmlEncode(RModel.AboutMe),
+					ProfileImage = RModel.ProfileImage,
+
 
 				};
-				var result = await userManager.CreateAsync(user, RModel.Password);
+				
+                var result = await userManager.CreateAsync(user, RModel.Password);
 				if (result.Succeeded)
 				{
-					await signInManager.SignInAsync(user, false);
+
 					return RedirectToPage("Login");
 				}
 				foreach (var error in result.Errors)
 				{
 					ModelState.AddModelError("", error.Description);
 				}
+
 			}
 			return Page();
 		}
-				public void OnGet()
+		public void OnGet()
         {
         }
     }
+
 }

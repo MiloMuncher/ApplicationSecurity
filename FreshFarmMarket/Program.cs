@@ -1,4 +1,5 @@
 using FreshFarmMarket.Model;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using WebApp_Core_Identity.Model;
 
@@ -18,6 +19,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddDistributedMemoryCache(); //save session in memory
+
 builder.Services.AddSession(options =>
 {
 	options.IdleTimeout = TimeSpan.FromSeconds(30);
@@ -46,6 +48,8 @@ app.UseStaticFiles();
 
 app.UseSession();
 app.UseRouting();
+
+app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
 app.UseAuthentication();
 app.UseAuthorization();
